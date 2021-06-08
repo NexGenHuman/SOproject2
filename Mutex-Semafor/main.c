@@ -11,10 +11,11 @@ pthread_mutex_t mutexSeat;
 pthread_mutex_t mutexWRoom;
 
 int maxSeatsInWRoom = 10;
-int NumberOfClients = 30;
+int numberOfClients = 30;
 int freeSeatsInWRoom = 10;
 int maxClippingTime = 10;
 int maxClientArrivalTimeDiffrence = 10;
+int rejectedCunter = 0;
 bool bDebug = false;
 
 int main(int argc, char **argv)
@@ -25,10 +26,11 @@ int main(int argc, char **argv)
         switch (option)
         {
         case 'c': //number of clients that will come to barber
-            NumberOfClients = optarg;
+            numberOfClients = optarg;
             break;
         case 's': //maximum number of seats in waiting room
             maxSeatsInWRoom = optarg;
+            freeSeatsInWRoom = optarg;
             break;
         case 't': //maximum clipping time
             maxClippingTime = optarg;
