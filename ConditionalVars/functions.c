@@ -22,7 +22,7 @@ void Print_list(note_t)
 
 }
 
-void Push(struct node_t *head, int cNumber)
+void Push(struct node_t *head, int cNumber, int timeOfArrival)
 {
 
 }
@@ -32,7 +32,7 @@ void Remove(struct node_t *head, int cNumber)
 
 }
 
-void Append(struct node_t *head, int cNumber)
+void Append(struct node_t *head, int cNumber, int timeOfArrival)
 {
 
 }

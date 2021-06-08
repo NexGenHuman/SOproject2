@@ -13,11 +13,16 @@ sem_t semBarber;
 pthread_mutex_t mutexSeat;
 pthread_mutex_t mutexWRoom;
 
+struct node_t *allClients = NULL;
+struct node_t *rejectedClients = NULL;
+struct node_t *clientsB4WRoom = NULL;
+struct node_t *clientsInWRoom = NULL;
+
 int maxSeatsInWRoom = 10;
 int numberOfClients = 30;
 int freeSeatsInWRoom = 10;
 int maxClippingTime = 10;
-int maxClientArrivalTimeDiffrence = 10;
+int maxClientArrivalTime = 10;
 int rejectedCunter = 0;
 bool bDebug = false;
 
@@ -39,7 +44,7 @@ int main(int argc, char **argv)
             maxClippingTime = optarg;
             break;
         case 'm': //maximum difrence between arrival of clients
-            maxClientArrivalTimeDiffrence = optarg;
+            maxClientArrivalTime = optarg;
             break;
         case 'd': //debug boolean
             bDebug = true;
@@ -72,6 +77,8 @@ int main(int argc, char **argv)
     for (int i = 0; i < numberOfClients; i++)
     {
         //miejsce na dodanie klienta do listy
+        int timeOfArrival = rand() % maxClientArrivalTime + 1;
+        append(allClients, i, timeOfArrival);
         pthread_create(&clientThread[i], NULL, Client, (void *)i);
     }
 
@@ -84,7 +91,6 @@ int main(int argc, char **argv)
         pthread_join(clientThread[i], NULL);
     }
 
-    pthread_join(addClientThread, NULL);
     pthread_join(barberThread, NULL);
 
     sem_destroy(&semBarber);
