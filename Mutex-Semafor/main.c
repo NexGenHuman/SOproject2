@@ -4,6 +4,9 @@
 #include <getopt.h>
 #include <stdbool.h>
 #include <syslog.h>
+#include "functions.h"
+
+void *CThread(void *arg) {}
 
 sem_t semClient;
 sem_t semBarber;
@@ -35,7 +38,7 @@ int main(int argc, char **argv)
         case 't': //maximum clipping time
             maxClippingTime = optarg;
             break;
-        case 'm': //opcja "-s sleeptime" - zmienia czas spania
+        case 'm': //maximum difrence between arrival of clients
             maxClientArrivalTimeDiffrence = optarg;
             break;
         case 'd': //debug boolean
@@ -58,7 +61,44 @@ int main(int argc, char **argv)
             abort();
         }
 
-    
+    pthread_t clientThread[numberOfClients];
+    pthread_t barberThread;
+    pthread_t addClientThread;
+
+    //semaphore inicialization
+    sem_init(&semClient, 0, 0);
+    sem_init(&semBarber, 0, 0);
+
+    for (int i = 0; i < numberOfClients; i++)
+    {
+        //miejsce na dodanie klienta do listy
+        pthread_create(&clientThread[i], NULL, Client, (void *)i);
+    }
+
+    pthread_create(&barberThread, NULL, Barber, NULL);
+
+    pthread_create(&addClientThread, NULL, AddClients, NULL);
+
+    for (int i = 0; i < numberOfClients; i++)
+    {
+        pthread_join(clientThread[i], NULL);
+    }
+
+    pthread_join(addClientThread, NULL);
+    pthread_join(barberThread, NULL);
+
+    sem_destroy(&semBarber);
+    sem_destroy(&semClient);
+    pthread_mutex_destroy(&mutexSeat);
+    pthread_mutex_destroy(&mutexWRoom);
 
     exit(EXIT_SUCCESS);
+}
+
+void *Client(void *arg) //Client thread
+{
+}
+
+void *Barber(void *arg) //Barber thread
+{
 }
