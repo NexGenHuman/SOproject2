@@ -1,8 +1,8 @@
 OBJ = main.o functions.o
 all: sleeping_barber
 
-cp_daemon: $(OBJ)
-	gcc $(OBJ) - pthread -o sleeping_barber
+sleeping_barber: $(OBJ)
+	gcc $(OBJ) -pthread -o sleeping_barber
 
 $(OBJ): functions.h
 
