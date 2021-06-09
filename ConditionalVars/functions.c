@@ -17,22 +17,29 @@ void AddClients()
 
 void AddClient()
 {
-
+    
 }
 
-void Print_list(note_t)
+void Print_list(node_t)
 {
 
 }
 
 void Push(struct node_t *head, int cNumber, int timeOfArrival)
 {
-
+    struct node *newElement = (struct node*)malloc(sizeof(struct node));
+    newElement->clientNumber = cNumber;
+    newElement->time = timeOfArrival;
+    newElement->next = head;
+    head = newElement;
 }
 
 void Remove(struct node_t *head, int cNumber)
 {
+    if(head != NULL)
+    {
 
+    }
 }
 
 void Append(struct node_t *head, int cNumber, int timeOfArrival)
