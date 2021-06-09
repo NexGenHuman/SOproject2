@@ -49,7 +49,7 @@ int main(int argc, char **argv)
         case 't': //maximum clipping time
             maxClippingTime = atoi(optarg);
             break;
-        case 'm': //maximum difrence between arrival of clients
+        case 'm': //maximum arrival time of clients
             maxClientArrivalTime = atoi(optarg);
             break;
         case 'd': //debug boolean
@@ -148,7 +148,7 @@ void *Client(void *cNumber) //Client thread
     if (freeSeatsInWRoom <= 0)
     {
         resignedCounter++;
-        printf("Res:%d WRoom: %d/%d [in: %d]\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat);
+        printf("Res:%d WRoom: %d/%d [in: %d] - Client: %d Resigned\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat, clientNumber);
         pthread_mutex_unlock(&mutexWRoom);
         if (bDebug == true)
         {
@@ -163,7 +163,7 @@ void *Client(void *cNumber) //Client thread
         {
             Append(&clientsInWRoom, clientNumber, 0);
         }
-        printf("Res:%d WRoom: %d/%d [in: %d]\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat);
+        printf("Res:%d WRoom: %d/%d [in: %d] - Client: %d Joined queue\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat, clientNumber);
         if (bDebug == true)
         {
             Print(resignedClients, clientsInWRoom);
@@ -178,11 +178,11 @@ void *Client(void *cNumber) //Client thread
             Remove(&clientsInWRoom, clientNumber);
         }
         clientOnSeat = clientNumber;
-        /*printf("Res:%d WRoom: %d/%d [in: %d]\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat);
+        printf("Res:%d WRoom: %d/%d [in: %d] - Client: %d Going for clipping\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat, clientNumber);
         if (bDebug == true)
         {
             Print(resignedClients, clientsInWRoom);
-        }*/
+        }
     }
     return NULL;
 }
@@ -202,11 +202,11 @@ void *Barber() //Barber thread
         sleep(clippingTime);
         pthread_mutex_unlock(&mutexSeat);
         clientOnSeat = -1;
-        printf("Res:%d WRoom: %d/%d [in: %d]\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat);
+        /*printf("Res:%d WRoom: %d/%d [in: %d]\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat);
         if (bDebug == true)
         {
             Print(resignedClients, clientsInWRoom);
-        }
+        }*/
     }
     return NULL;
 }
