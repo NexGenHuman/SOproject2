@@ -144,7 +144,7 @@ void *Client(void *cNumber) //Client thread
     long temp = (long)cNumber;
     int clientNumber = (int)temp;
     int travelTime = SleepTime(&allClients, clientNumber);
-    printf("nr: %d traveltime: %d\n", clientNumber, travelTime);
+    //printf("nr: %d traveltime: %d\n", clientNumber, travelTime);
     sleep(travelTime);
     pthread_mutex_lock(&mutexWRoom);
 
