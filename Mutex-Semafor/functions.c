@@ -8,17 +8,9 @@
 #include <stdio.h>
 
 //struct node *allClients;
-//struct node *rejectedClients;
+//struct node *resignedClients;
 //struct node *clientsB4WRoom;
 //struct node *clientsInWRoom;
-
-void AddClients()
-{
-}
-
-void AddClient()
-{
-}
 
 void Print_list(struct node *head)
 {
@@ -58,15 +50,14 @@ void Remove(struct node **head, int cNumber)
     {
         Pop(head);
     }
-    
 }
 
 int Pop(struct node **head)
 {
     struct node *next_node = NULL;
-    if(*head == NULL)
+    if (*head == NULL)
         return -1;
-    
+
     next_node = (*head)->next;
     free(*head);
     *head = next_node;
@@ -96,4 +87,16 @@ void Append(struct node **head, int cNumber, int _timeOfArrival)
         new_node->next = *head;
         *head = new_node;
     }
+}
+
+int SleepTime(struct node **head, int cNumber)
+{
+    struct node *current = *head;
+    struct node *temp = NULL;
+
+    while (current->clientNumber != cNumber)
+    {
+        current = current->next;
+    }
+    return current->timeOfArrival;
 }
