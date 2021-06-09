@@ -35,9 +35,6 @@ bool finished = false;
 
 int main(int argc, char **argv)
 {
-    printf("aaaaaaaaaaaaaaaaaaaaaaa client");
-    openlog("SleepingBarber", LOG_CONS, LOG_USER);
-
     int option;
     while ((option = getopt(argc, argv, "c:s:t:m:d")) != -1)
         switch (option)
@@ -60,15 +57,15 @@ int main(int argc, char **argv)
             break;
         case '?':
             if (optopt == 'c')
-                syslog(LOG_ERR, "Option -c requires argument");
+                printf("Option -c requires argument");
             else if (optopt == 's')
-                syslog(LOG_ERR, "Option -s requires argument");
+                printf("Option -s requires argument");
             else if (optopt == 't')
-                syslog(LOG_ERR, "Option -t requires argument");
+                printf("Option -t requires argument");
             else if (optopt == 'm')
-                syslog(LOG_ERR, "Option -m requires argument");
+                printf("Option -m requires argument");
             else
-                syslog(LOG_ERR, "Unknown option character");
+                printf("Unknown option character");
             exit(EXIT_FAILURE);
             break;
         default:
@@ -92,7 +89,7 @@ int main(int argc, char **argv)
         iret = pthread_create(&clientThread[i], NULL, Client, (void *)i);
         if (iret)
         {
-            syslog(LOG_ERR, "Error creating clientThread");
+            printf("Error creating clientThread");
             exit(EXIT_FAILURE);
         }
         //printf("Created client");
@@ -106,18 +103,18 @@ int main(int argc, char **argv)
     //printf("Created barber");
     if (iret)
     {
-        syslog(LOG_ERR, "Error creating barberThread");
+        printf("Error creating barberThread");
         exit(EXIT_FAILURE);
     }
 
     if (pthread_mutex_init(&mutexSeat, NULL) != 0)
     {
-        syslog(LOG_ERR, "Error creating mutexSeat");
+        printf("Error creating mutexSeat");
         exit(EXIT_FAILURE);
     }
     if (pthread_mutex_init(&mutexWRoom, NULL) != 0)
     {
-        syslog(LOG_ERR, "Error creating mutexSeat");
+        printf("Error creating mutexWRoom");
         exit(EXIT_FAILURE);
     }
 
@@ -203,13 +200,13 @@ void *Barber() //Barber thread
         
         clippingTime = rand() % maxClippingTime + 1;
         sleep(clippingTime);
+        pthread_mutex_unlock(&mutexSeat);
+        clientOnSeat = -1;
         printf("Res:%d WRoom: %d/%d [in: %d]\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat);
         if (bDebug == true)
         {
             Print(resignedClients, clientsInWRoom);
         }
-        clientOnSeat = -1;
-        pthread_mutex_unlock(&mutexSeat);
     }
     return NULL;
 }
