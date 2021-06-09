@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 {
     printf("aaaaaaaaaaaaaaaaaaaaaaa client");
     openlog("SleepingBarber", LOG_CONS, LOG_USER);
-    
+
     int option;
     while ((option = getopt(argc, argv, "c:s:t:m:d")) != -1)
         switch (option)
@@ -154,40 +154,61 @@ void *Client(void *cNumber) //Client thread
         printf("Res:%d WRoom: %d/%d [in: %d]\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat);
         pthread_mutex_unlock(&mutexWRoom);
         if (bDebug == true)
+        {
             Append(&resignedClients, clientNumber, 0);
+            Print(resignedClients, clientsInWRoom);
+        }
     }
     else
     {
         freeSeatsInWRoom--;
         if (bDebug == true)
+        {
             Append(&clientsInWRoom, clientNumber, 0);
+        }
         printf("Res:%d WRoom: %d/%d [in: %d]\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat);
+        if (bDebug == true)
+        {
+            Print(resignedClients, clientsInWRoom);
+        }
         sem_post(&semClient);
         pthread_mutex_unlock(&mutexWRoom);
         sem_wait(&semBarber);
-        freeSeatsInWRoom++;
+        
         pthread_mutex_lock(&mutexSeat);
         if (bDebug == true)
+        {
             Remove(&clientsInWRoom, clientNumber);
+        }
         clientOnSeat = clientNumber;
-        printf("Res:%d WRoom: %d/%d [in: %d]\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat);
+        /*printf("Res:%d WRoom: %d/%d [in: %d]\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat);
+        if (bDebug == true)
+        {
+            Print(resignedClients, clientsInWRoom);
+        }*/
     }
     return NULL;
 }
 
 void *Barber() //Barber thread
 {
-    int clippingTime ;
-    while(finished == false)
+    int clippingTime;
+    while (finished == false)
     {
         sem_wait(&semClient);
         pthread_mutex_lock(&mutexWRoom);
         sem_post(&semBarber);
+        freeSeatsInWRoom++;
         pthread_mutex_unlock(&mutexWRoom);
-        clippingTime = rand()%maxClippingTime+1;
+        
+        clippingTime = rand() % maxClippingTime + 1;
         sleep(clippingTime);
         printf("Res:%d WRoom: %d/%d [in: %d]\n", resignedCounter, maxSeatsInWRoom - freeSeatsInWRoom, maxSeatsInWRoom, clientOnSeat);
-
+        if (bDebug == true)
+        {
+            Print(resignedClients, clientsInWRoom);
+        }
+        clientOnSeat = -1;
         pthread_mutex_unlock(&mutexSeat);
     }
     return NULL;

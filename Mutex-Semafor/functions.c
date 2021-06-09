@@ -100,3 +100,12 @@ int SleepTime(struct node **head, int cNumber)
     }
     return current->timeOfArrival;
 }
+
+void Print(struct node *list1, struct node *list2)
+{
+    printf("DEBUG: Res:");
+    Print_list(list1);
+    printf(" WRoom:");
+    Print_list(list2);
+    printf("\n");
+}

@@ -15,5 +15,6 @@ void Remove(struct node **head, int cNumber);
 int Pop(struct node **head);
 void Append(struct node **head, int cNumber, int _timeOfArrival);
 int SleepTime(struct node **head, int cNumber);
+void Print(struct node *list1, struct node *list2);
 
 #endif
