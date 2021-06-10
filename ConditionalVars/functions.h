@@ -1,25 +1,27 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-
+//Linked list for storing clients
 extern struct node {
     int clientNumber;
-    unsigned int time;
+    int timeOfArrival;
     struct node * next;
-} node_t;
+} node;
 
-//Prints current state of client decisions np. Res:2 WRomm: 5/10 [in: 4]
-//Parameters: How many resigned, How many in queue, Max number in queue, Client currently being serviced
-void PrintState(int res, int wRoom, int roomCap, int client);
-//Adds client to the list
-void AddClient();
-//Not sure what it's supposed to do
-void AddClients();
-void Print_list(node_t);
-void Push(struct node_t *head, int cNumber, int timeOfArrival);
-void Remove(struct node_t *head, int cNumber);
-void Append(struct node_t *head, int cNumber, int timeOfArrival);
+
+//Prints numbers of all clients within a list
+void Print_list(struct node *head);
+//Pushes client into the first place in list
+void Push(struct node **head, int cNumber, int _timeOfArrival);
+//Removes client with a given number from the list
+void Remove(struct node **head, int cNumber);
+//Removes first client from the list, then retuns his number
+int Pop(struct node **head);
+//Adds client to the end of a list
+void Append(struct node **head, int cNumber, int _timeOfArrival);
+//Returns time of arrival to the barber of a chosen client
+int SleepTime(struct node **head, int cNumber);
+//Prints debug message
+void Print(struct node *list1, struct node *list2);
 
 #endif
